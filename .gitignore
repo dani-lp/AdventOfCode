@@ -1,0 +1,14 @@
+/tests
+base.js
+node_modules
+
+# Rust
+.*.sw[po]
+target/
+**/*.rs.bk
+
+# inputs
+testinput.txt
+test.txt
+input.txt
+*.dot
