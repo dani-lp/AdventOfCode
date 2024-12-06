@@ -38,3 +38,7 @@ export const zip = <T extends any[]>(
     (_, i) => arrays.map((arr) => arr[i]) as { [K in keyof T]: T[K] },
   );
 };
+
+export const printGrid = (grid: string[][]) => {
+  grid.forEach((row) => console.log(row.join("")));
+};
