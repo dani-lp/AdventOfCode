@@ -153,6 +153,3 @@ const result = invalidEquations
   .reduce((a, b) => a + b, 0);
 
 assertResult(11387, result);
-
-// 3.598.806.528.244 too low
-// 3.598.807.187.910 too low
