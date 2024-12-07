@@ -17,21 +17,17 @@ const generateExtendedOperations = (valuesLength: number) => {
   const characters = ["+", "*", "#"];
   const result: string[] = [];
 
-  // Recursive function to generate combinations
   const backtrack = (current: string, length: number) => {
-    // If we've reached the desired length, add to results
     if (current.length === length) {
       result.push(current);
       return;
     }
 
-    // Try adding each character
     for (const char of characters) {
       backtrack(current + char, length);
     }
   };
 
-  // Start the backtracking process
   backtrack("", valuesLength - 1);
 
   return result;
@@ -46,7 +42,7 @@ const equations = input.map((row) => {
   };
 });
 
-const validEquations = equations.filter((eq) => {
+const isEquationValid = (eq: { total: number; values: number[] }): boolean => {
   const { total, values: _values } = eq;
   const operations = generateOperations(_values.length);
 
@@ -72,35 +68,10 @@ const validEquations = equations.filter((eq) => {
     }
   });
   return valid;
-});
+};
 
-const invalidEquations = equations.filter((eq) => {
-  const { total, values: _values } = eq;
-  const operations = generateOperations(_values.length);
-
-  let valid = false;
-  operations.forEach((op) => {
-    if (valid) return;
-    const values = [..._values];
-
-    let result = values.shift()!;
-    const opArr = op.split("");
-    while (opArr.length) {
-      const operation = opArr.shift();
-      const nextNum = values.shift()!;
-      if (operation === "+") {
-        result = result + nextNum;
-      } else if (operation === "*") {
-        result = result * nextNum;
-      }
-    }
-
-    if (result === total) {
-      valid = true;
-    }
-  });
-  return !valid;
-});
+const validEquations = equations.filter(isEquationValid);
+const invalidEquations = equations.filter((eq) => !isEquationValid(eq));
 
 const computeOpResult = (_opArr: readonly string[]): number => {
   const opArr = [..._opArr];
