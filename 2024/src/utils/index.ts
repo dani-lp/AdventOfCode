@@ -42,3 +42,22 @@ export const zip = <T extends any[]>(
 export const printGrid = (grid: string[][]) => {
   grid.forEach((row) => console.log(row.join("")));
 };
+
+export const readGrid = ({
+  grid,
+  x,
+  y,
+}: {
+  grid: string[][];
+  x: number;
+  y: number;
+}): string | null => {
+  try {
+    return grid[y][x];
+  } catch {
+    return null;
+  }
+};
+
+export const pairs = <T>(arr: Array<T>): Array<T[]> =>
+  arr.map((v, i) => arr.slice(i + 1).map((w) => [v, w])).flat();
