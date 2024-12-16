@@ -8,8 +8,6 @@ const END = "E";
 
 const grid = input.map((r) => r.split(""));
 
-type Direction = "up" | "down" | "right" | "left";
-
 type Position = {
   x: number;
   y: number;
@@ -114,40 +112,27 @@ const dijskstra = () => {
     const currentDirection = parseInt(currentNodeKey.split(",")[2]);
 
     currentNode.neighbors.forEach((neighbor) => {
-      // Calculate direction to the neighbor
       const dx = neighbor.x - currentNode.x;
       const dy = neighbor.y - currentNode.y;
 
-      // Find the direction index
       const newDirectionIndex = DIRECTIONS.findIndex(
         (dir) => dir.dx === dx && dir.dy === dy,
       );
 
-      // Get current node's distance
       const currentDistance = distances.get(currentNodeKey)!;
-
-      // Calculate distance with potential turn penalty
-      let tentativeDistance = currentDistance + 1; // Base movement cost
-
-      // Add turn penalty if changing direction
+      let tentativeDistance = currentDistance + 1;
       if (newDirectionIndex !== currentDirection) {
         tentativeDistance += TURN_PENALTY;
       }
-
-      // Create key for the neighbor with its new direction
       const neighborKey = createNodeKey(neighbor, newDirectionIndex);
-
-      // Update if new path is shorter
       const existingNeighborDistance = distances.get(neighborKey) ?? Infinity;
       if (tentativeDistance < existingNeighborDistance) {
         distances.set(neighborKey, tentativeDistance);
       }
     });
 
-    // Mark current node-direction as visited
     unvisitedSet.delete(currentNodeKey);
 
-    // Find the next unvisited node with the smallest distance
     const eligibleDistances = Array.from(distances.entries())
       .filter(([key]) => unvisitedSet.has(key))
       .map(([key, distance]) => ({ key, distance }))
@@ -162,7 +147,6 @@ const dijskstra = () => {
     currentNodeKey = eligibleDistances[0].key;
   }
 
-  // Group distances by node, keeping the minimum distance for each node
   const finalDistances = new Map<Node, number>();
   graph.forEach((node) => {
     const nodeDistances = Array.from(distances.entries())
